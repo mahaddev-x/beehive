@@ -47,26 +47,19 @@ npm install -g beehive-cli
 beehive setup
 ```
 
-### Option B — Download binary (no Node.js required)
+### Option B — One-line installer (no Node.js required)
 
-Download the pre-built binary for your platform from the [Releases](https://github.com/mahaddev-x/beehive/releases) page:
-
-| Platform | File |
-|---|---|
-| Windows 10/11 (x64) | `beehive-v*-bun-windows-x64.zip` |
-| macOS Apple Silicon (M1/M2/M3/M4) | `beehive-v*-bun-darwin-arm64.tar.gz` |
-| macOS Intel | `beehive-v*-bun-darwin-x64.tar.gz` |
-| Linux x64 (Ubuntu, Debian, Arch, Kali, Fedora…) | `beehive-v*-bun-linux-x64.tar.gz` |
-| Linux ARM64 (Raspberry Pi 4/5, AWS Graviton…) | `beehive-v*-bun-linux-arm64.tar.gz` |
-
-**Windows:** Extract the zip, move `beehive.exe` to a folder on your `PATH`.
-
-**macOS / Linux:**
-```bash
-tar -xzf beehive-v*-bun-darwin-arm64.tar.gz
-sudo mv beehive/beehive /usr/local/bin/
-beehive setup
+**Windows** — paste in PowerShell:
+```powershell
+irm https://raw.githubusercontent.com/mahaddev-x/beehive/main/install.ps1 | iex
 ```
+
+**macOS / Linux** — paste in your terminal:
+```bash
+curl -fsSL https://raw.githubusercontent.com/mahaddev-x/beehive/main/install.sh | bash
+```
+
+Both scripts automatically download the right binary for your platform, install it to `~/.beehive/bin/`, and add it to your PATH. Restart your terminal and run `beehive setup`.
 
 ---
 
