@@ -1,0 +1,31 @@
+name: url-scraper
+description: Fetch a URL and extract key information from the page content.
+model: groq/llama-3.3-70b-versatile
+temperature: 0.2
+max_tokens: 1024
+tools:
+  - fetch_url
+output_format: json
+output_schema:
+  type: object
+  properties:
+    title:
+      type: string
+    summary:
+      type: string
+      description: 2-3 sentence summary of the page
+    key_points:
+      type: array
+      items:
+        type: string
+      description: Up to 5 key takeaways
+    category:
+      type: string
+      description: Type of page (article, product, docs, blog, etc.)
+  required: [title, summary, key_points, category]
+system_prompt: |
+  You are a web content analyst. Given a URL, fetch the page and extract structured information.
+  Use the fetch_url tool to retrieve the page content, then respond with a JSON object.
+  Respond with JSON only — no markdown fences, no extra text.
+user_prompt_template: |
+  Fetch and analyze this URL: {{url}}

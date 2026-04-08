@@ -1,0 +1,31 @@
+# Rust (legacy)
+target/
+
+# Node
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Release artifacts
+binaries/
+dist-release/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Env / secrets
+.env
+.env.local
+
+# Pi-mono subdir (cloned separately, not part of this repo)
+pi-mono/
+
+# PRD (internal document)
+BE_FINAL_PRD_v1.0.md
+*.PRD.md

@@ -1,0 +1,29 @@
+name: text-classifier
+description: Classify text into one of several user-defined categories.
+model: groq/llama-3.1-8b-instant
+temperature: 0.1
+max_tokens: 256
+output_format: json
+output_schema:
+  type: object
+  properties:
+    category:
+      type: string
+    confidence:
+      type: number
+    reasoning:
+      type: string
+  required: [category, confidence, reasoning]
+system_prompt: |
+  You are a text classifier. Given a piece of text and a list of categories, classify the text into
+  the most appropriate category. Respond with a JSON object containing:
+  - category: the chosen category name (exactly as provided)
+  - confidence: 0.0 to 1.0
+  - reasoning: one sentence explaining your choice
+
+  Respond with JSON only — no markdown fences, no extra text.
+user_prompt_template: |
+  Categories: {{categories}}
+
+  Text to classify:
+  {{text}}

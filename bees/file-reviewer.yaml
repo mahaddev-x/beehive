@@ -1,0 +1,35 @@
+name: file-reviewer
+description: Review a file and provide structured feedback on its content, quality, or issues.
+model: groq/llama-3.3-70b-versatile
+temperature: 0.3
+max_tokens: 1024
+tools:
+  - read_file
+output_format: json
+output_schema:
+  type: object
+  properties:
+    summary:
+      type: string
+      description: Brief description of the file's content
+    issues:
+      type: array
+      items:
+        type: string
+      description: List of problems or concerns found
+    suggestions:
+      type: array
+      items:
+        type: string
+      description: List of improvement suggestions
+    score:
+      type: number
+      description: Quality score from 0 to 10
+  required: [summary, issues, suggestions, score]
+system_prompt: |
+  You are a code and content reviewer. Use the read_file tool to read the specified file,
+  then provide structured feedback. Respond with a JSON object only — no markdown fences.
+user_prompt_template: |
+  Review this file: {{path}}
+
+  Focus on: {{focus}}
