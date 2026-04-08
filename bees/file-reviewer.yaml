@@ -1,49 +1,35 @@
 name: file-reviewer
-version: "1.0"
-description: "Reviews a source code file, returns issues and quality score"
-
+description: Review a file and provide structured feedback on its content, quality, or issues.
 model: groq/llama-3.3-70b-versatile
-
-temperature: 0.1
+temperature: 0.3
 max_tokens: 1024
-timeout_seconds: 60
-max_parallel: 50
-
-system_prompt: |
-  You are an expert code reviewer. Given source code, analyze it thoroughly
-  and return ONLY a valid JSON object. No explanation. No markdown. No text
-  outside the JSON object.
-
-user_prompt_template: |
-  Review this {{language}} source code file.
-
-  File: {{file_path}}
-  Content:
-  {{file_content}}
-
-  Return JSON only with these fields:
-  - quality_score: integer from 1-10
-  - issues: array of strings describing problems found
-  - suggestions: array of strings with improvement recommendations
-  - summary: string with a brief overall assessment
-
-input_vars:
-  - name: file_path
-    type: string
-    required: true
-  - name: language
-    type: string
-    required: false
-
-output_schema:
-  quality_score: integer
-  issues: array
-  suggestions: array
-  summary: string
-
 tools:
   - read_file
+output_format: json
+output_schema:
+  type: object
+  properties:
+    summary:
+      type: string
+      description: Brief description of the file's content
+    issues:
+      type: array
+      items:
+        type: string
+      description: List of problems or concerns found
+    suggestions:
+      type: array
+      items:
+        type: string
+      description: List of improvement suggestions
+    score:
+      type: number
+      description: Quality score from 0 to 10
+  required: [summary, issues, suggestions, score]
+system_prompt: |
+  You are a code and content reviewer. Use the read_file tool to read the specified file,
+  then provide structured feedback. Respond with a JSON object only — no markdown fences.
+user_prompt_template: |
+  Review this file: {{path}}
 
-retry:
-  max_attempts: 3
-  backoff_seconds: 2
+  Focus on: {{focus}}

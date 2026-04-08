@@ -1,42 +1,16 @@
 name: data-extractor
-version: "1.0"
-description: "Extracts structured data from unstructured text"
-
+description: Extract structured fields from unstructured text.
 model: groq/llama-3.1-8b-instant
-
 temperature: 0.0
 max_tokens: 512
-timeout_seconds: 30
-max_parallel: 500
-
+output_format: json
 system_prompt: |
-  You are a precise data extraction engine. Given unstructured text and a target
-  schema, extract all requested fields and return ONLY a valid JSON object.
-  If a field cannot be found, use null. No explanation. No markdown.
-  No text outside the JSON object.
-
+  You are a data extraction engine. Extract the requested fields from the provided text.
+  Respond with a JSON object containing the extracted fields.
+  If a field cannot be found, use null for its value.
+  Respond with JSON only — no markdown fences, no extra text.
 user_prompt_template: |
-  Extract data from this text according to the schema.
+  Extract these fields: {{fields}}
 
-  Schema to extract: {{schema}}
-
-  Text:
+  From this text:
   {{text}}
-
-  Return JSON only matching the requested schema fields.
-
-input_vars:
-  - name: text
-    type: string
-    required: true
-  - name: schema
-    type: string
-    required: true
-
-output_schema: {}
-
-tools: []
-
-retry:
-  max_attempts: 3
-  backoff_seconds: 2

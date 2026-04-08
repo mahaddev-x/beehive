@@ -1,43 +1,30 @@
 name: sentiment-scorer
-version: "1.0"
-description: "Returns sentiment score, emotions, and tone summary"
-
-model: ollama/qwen2.5:3b
-
-temperature: 0.0
+description: Score the sentiment of a piece of text as positive, negative, or neutral with a confidence score.
+model: groq/llama-3.1-8b-instant
+temperature: 0.1
 max_tokens: 256
-timeout_seconds: 30
-max_parallel: 100
-
+output_format: json
+output_schema:
+  type: object
+  properties:
+    sentiment:
+      type: string
+      enum: [positive, negative, neutral]
+    score:
+      type: number
+      description: Confidence from 0.0 to 1.0
+    reason:
+      type: string
+      description: One-sentence explanation
+  required: [sentiment, score, reason]
 system_prompt: |
-  You are a sentiment analysis engine. Given text, analyze the sentiment,
-  emotions, and tone. Return ONLY a valid JSON object.
-  No explanation. No markdown. No text outside the JSON object.
+  You are a sentiment analysis engine. Given a piece of text, respond with a JSON object containing:
+  - sentiment: "positive", "negative", or "neutral"
+  - score: confidence from 0.0 to 1.0
+  - reason: one-sentence explanation
 
+  Respond with JSON only — no markdown fences, no extra text.
 user_prompt_template: |
-  Analyze the sentiment of this text:
+  Analyze the sentiment of the following text:
 
   {{text}}
-
-  Return JSON only with these fields:
-  - sentiment: string (must be exactly "positive", "negative", or "neutral")
-  - score: number between -1.0 (most negative) and 1.0 (most positive)
-  - emotions: array of strings describing detected emotions (e.g. ["joy", "surprise"])
-  - tone_summary: string briefly describing the overall tone
-
-input_vars:
-  - name: text
-    type: string
-    required: true
-
-output_schema:
-  sentiment: string
-  score: number
-  emotions: array
-  tone_summary: string
-
-tools: []
-
-retry:
-  max_attempts: 3
-  backoff_seconds: 2
