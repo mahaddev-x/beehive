@@ -41,7 +41,8 @@ Expand-Archive -Path $ZipPath -DestinationPath $BinDir -Force
 Remove-Item $ZipPath
 
 # Add BinDir to user PATH permanently (if not already there)
-$UserPath = [System.Environment]::GetEnvironmentVariable("PATH", "User") ?? ""
+$UserPath = [System.Environment]::GetEnvironmentVariable("PATH", "User")
+if (-not $UserPath) { $UserPath = "" }
 if ($UserPath -notlike "*$BinDir*") {
     [System.Environment]::SetEnvironmentVariable("PATH", "$BinDir;$UserPath", "User")
 }
